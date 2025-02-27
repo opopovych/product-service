@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переглянути завантажені прайси</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #3e2723;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #5d4037;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: #8d6e63;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #3e2723;
+        }
+
+        th {
+            background-color: #6d4c41;
+        }
+
+        a {
+            color: #ffeb3b;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* Медіа-запит для мобільних пристроїв */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+
+            table {
+                font-size: 0.9em; /* Зменшення шрифтів таблиці на мобільних пристроях */
+            }
+
+            th, td {
+                padding: 8px; /* Зменшення відступів для більш компактної таблиці */
+            }
+
+            td, th {
+                word-wrap: break-word;
+                max-width: 150px; /* Обмеження ширини стовпців */
+            }
+
+            a {
+                font-size: 0.9em;
+            }
+
+            .container h1 {
+                font-size: 1.2em;
+            }
+        }
+
+        /* Додаткові стилі для менших екранів */
+        @media (max-width: 480px) {
+            table {
+                font-size: 0.8em;
+            }
+
+            td, th {
+                padding: 6px; /* Ще більше зменшуємо відступи на дуже малих екранах */
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Список завантажених прайсів</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Ідентифікатор</th>
+            <th>Назва</th>
+            <th>Тип</th>
+            <th>Дата завантаження</th>
+            <th>Перегляд</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Вивід PDF файлів -->
+        <tr th:each="pdf : ${pdfFiles}">
+            <td th:text="${pdf.id}"></td>
+            <td th:text="${pdf.filename}"></td>
+            <td>PDF</td>
+            <td th:text="${pdf.uploadDate}"></td>
+            <td><a th:href="@{'/pdf/view/' + ${pdf.id}}" target="_blank">👁️ Переглянути</a></td>
+        </tr>
+
+        <!-- Вивід Excel файлів -->
+        <tr th:each="excel : ${excelFiles}">
+            <td th:text="${excel.id}"></td>
+            <td th:text="${excel.filename}"></td>
+            <td>Excel</td>
+            <td th:text="${excel.uploadDate}"></td>
+            <td><a th:href="@{'/excel/view/' + ${excel.id}}" target="_blank">👁️ Переглянути</a></td>
+        </tr>
+
+        <!-- Вивід Фото -->
+        <tr th:each="photo : ${photos}">
+            <td th:text="${photo.id}"></td>
+            <td th:text="${photo.filename}"></td>
+            <td>Jpeg</td>
+            <td th:text="${photo.uploadDate}"></td>
+            <td><a th:href="@{'/photo/view/' + ${photo.id}}" target="_blank">👁️ Переглянути</a></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

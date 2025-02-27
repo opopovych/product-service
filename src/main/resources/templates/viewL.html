@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Переглянути прайс</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            text-align: center;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: none;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 1em;
+            background-color: #6F4E37;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin: 10px;
+        }
+
+        button:hover {
+            background-color: #4B3621;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            .container {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <img th:src="@{/coffee-logo.png}" alt="Логотип кави" class="logo">
+
+    <h1>Переглянути актуальний прайс</h1>
+
+    <button onclick="window.location.href='/pdf/view/L'">Переглянути прайс з картинками</button>
+    <button onclick="window.location.href='/excel/view/L'">Переглянути прайс без картинок</button>
+    <button onclick="window.location.href='/photo/view/L'">Переглянути оновлені товари</button>
+
+
+
+</div>
+
+<script>
+    // Зміна src для iframe при натисканні на кнопку "Переглянути прайс без картинок"
+    document.querySelector('button:nth-child(2)').addEventListener('click', function () {
+        document.getElementById('priceIframe').src = '/excel/view/L'; // Оновлюємо src для перегляду Excel
+    });
+
+    // Зміна src для iframe при натисканні на кнопку "Переглянути прайс з картинками"
+    document.querySelector('button:nth-child(1)').addEventListener('click', function () {
+        document.getElementById('priceIframe').src = '/pdf/view/L'; // Оновлюємо src для перегляду PDF
+    });
+</script>
+
+</body>
+</html>

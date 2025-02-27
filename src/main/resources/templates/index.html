@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Особистий кабінет адміністратора</title>
+    <style>
+        /* Загальні стилі */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #4e342e;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Основна контейнер */
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            padding: 90px 20px 20px; /* Відступ зверху для верхньої панелі */
+        }
+
+        .container {
+            background: #6d4c41;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            flex: 1 1 calc(33% - 20px);
+            min-width: 280px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        /* Кнопки */
+        button {
+            background-color: #ffcc80;
+            color: #3e2723;
+            font-size: 1.1rem;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 15px 0;
+            width: 100%;
+            transition: background-color 0.3s ease, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #ffb74d;
+            transform: translateY(-3px);
+        }
+
+        /* Бічна панель справа */
+        .sidebar {
+            background: #6d4c41;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            flex: 1 1 calc(33% - 20px);
+            min-width: 280px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar:hover {
+            transform: translateY(-5px);
+        }
+
+        .sidebar h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .sidebar a {
+            display: block;
+            text-decoration: none;
+            color: #ffeb3b;
+            font-size: 1.1rem;
+            margin: 10px 0;
+            transition: color 0.3s ease;
+        }
+
+        .sidebar a:hover {
+            color: #d32f2f;
+        }
+
+        /* Адаптивність */
+        @media (max-width: 768px) {
+            .container, .sidebar {
+                flex: 1 1 100%;
+                min-width: 100%;
+                padding: 20px;
+            }
+
+            .main-container {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <!-- Основна частина для адміністратора -->
+    <div class="container">
+        <h1>Особистий кабінет адміністратора</h1>
+        <button onclick="window.location.href='upload-with-images.html'">Завантажити прайс з картинками</button>
+        <button onclick="window.location.href='upload-without-images.html'">Завантажити прайс без картинок</button>
+        <button onclick="window.location.href='upload-update.html'">Завантажити оновлення</button>
+        <button onclick="window.location.href='/prices'">Переглянути завантажені прайси</button>
+        <button onclick="window.location.href='/logout'">Вийти</button>
+
+    </div>
+
+    <!-- Бічна панель справа для попереднього перегляду -->
+    <div class="sidebar">
+        <h2>Попередній перегляд для користувача</h2>
+        <a href="/viewL" target="_blank">Переглянути L версію</a>
+        <a href="/viewM" target="_blank">Переглянути M версію</a>
+        <a href="/viewS" target="_blank">Переглянути S версію</a>
+    </div>
+</div>
+
+</body>
+</html>
