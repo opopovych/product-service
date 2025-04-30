@@ -11,9 +11,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/pdf")
@@ -39,16 +43,22 @@ public class PdfFileController {
         }
     }
 
+
+
     // Перегляд актуального PDF прайса
     @GetMapping("/view/{id}")
-    public ResponseEntity<byte[]> viewPdf(@PathVariable String id) {
+    public ResponseEntity<byte[]> viewPdf(@PathVariable String id, Model model) {
         PdfFile pdfFile = pdfFileRepository.findById(id).orElseThrow(() -> new RuntimeException("File not found"));
+        Optional<PdfFile> pdfFile1 = pdfFileRepository.findById(id);
+
         LocalDate time = pdfFileRepository.findById(id).get().getUploadDate();
+        model.addAttribute("pdfDate", pdfFile1.map(PdfFile::getUploadDate).orElse(null));
         System.out.println(time.toString());
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfFile.getFileData());
     }
+
 
 
     @GetMapping("/upload/list")

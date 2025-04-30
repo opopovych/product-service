@@ -17,10 +17,21 @@ public class PdfFile {
 
     private String filename;   // Ім'я файлу
     private String contentType;
+    private String htmlContent;  // HTML контент
+
     @Column(name = "upload_date")
     private LocalDate uploadDate;
 
     // Гетери та сетери
+
+    public String getHtmlContent() {
+        return htmlContent;
+    }
+
+    public void setHtmlContent(String htmlContent) {
+        this.htmlContent = htmlContent;
+    }
+
     public String getId() {
         return id;
     }

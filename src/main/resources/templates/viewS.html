@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переглянути прайс</title>
+    <title>Переглянути прайс - ЄвроКава</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -13,75 +13,144 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #f4f4f9;
+            background: linear-gradient(to right, #6F4E37, #3E2723);
             text-align: center;
+            color: white;
         }
 
         .container {
-            width: 90%;
-            max-width: 800px;
-            padding: 20px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
+            width: 95%;
+            max-width: 1000px;
+            padding: 30px;
+            background-color: white;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            color: black;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+            padding: 0 10px;
+        }
+
+        .company-name {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #6F4E37;
+        }
+
+        .logo {
+            width: 150px;
         }
 
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
+            color: #6F4E37;
         }
 
-        .logo {
-            width: 150px;
-            margin-bottom: 20px;
-        }
-
-        iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
+        .buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
         }
 
         button {
-            padding: 10px;
-            font-size: 1em;
+            flex: 1;
+            padding: 15px;
+            font-size: 1.2em;
             background-color: #6F4E37;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin: 10px;
+            transition: background-color 0.3s, transform 0.2s;
         }
 
         button:hover {
             background-color: #4B3621;
+            transform: scale(1.05);
         }
+        .button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.update-date {
+    font-size: 0.9em;
+    color: #6F4E37;
+    margin-top: 5px;
+}
+@keyframes blink-animation {
+    50% { opacity: 0; }
+}
+
+.blink {
+    animation: blink-animation 1s infinite !important;
+    font-weight: bold;
+    color: #6F4E37 !important; /* Помітний колір */
+}
+
+
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5em;
+            .header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
             }
-            .container {
-                padding: 15px;
+            .buttons {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
             }
         }
+
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img th:src="@{/coffee-logo.png}" alt="Логотип кави" class="logo">
-    <h1>Переглянути актуальний прайс</h1>
+    <div class="header">
+        <div class="company-name">ЄвроКава</div>
+        <img th:src="@{/coffee-logo.png}" alt="Логотип кави" class="logo">
+    </div>
 
-    <button onclick="window.location.href='/pdf/view/S'">Переглянути прайс з картинками</button>
-    <button onclick="window.location.href='/excel/view/S'">Переглянути прайс без картинок</button>
-    <button onclick="window.location.href='/photo/view/S'">Переглянути оновлені товари</button>
+    <h1>Актуальний прайс</h1>
 
+    <div class="buttons">
+        <div class="button-container">
+            <button onclick="window.location.href='/pdf/view/S'">Прайс з фото асортименту</button>
+            <p class="update-date"
+               th:text="${pdfDate != null ? 'Оновлено: ' + #temporals.format(pdfDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
+               th:classappend="${pdfDate != null and #temporals.createNow().toLocalDate().isBefore(pdfDate.plusDays(1))} ? 'blink' : ''">
 
+            </p>
+        </div>
+        <div class="button-container">
+            <button onclick="window.location.href='/excel/view/S'">Прайс без фото асортименту</button>
+            <p class="update-date"
+               th:text="${excelDate != null ? 'Оновлено: ' + #temporals.format(excelDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
+               th:classappend="${excelDate != null and #temporals.createNow().toLocalDate().isBefore(excelDate.plusDays(1))} ? 'blink' : ''"
+            >
+            </p>
+        </div>
 
+        <div class="button-container">
+            <button onclick="window.location.href='/photo/view/S'">Останні оновлення асортименту</button>
+            <p class="update-date"
+               th:text="${photoDate != null ? 'Оновлено: ' + #temporals.format(photoDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
+               th:classappend="${photoDate != null and #temporals.createNow().toLocalDate().isBefore(photoDate.plusDays(1))} ? 'blink' : ''"
+            >
+            </p>
+        </div>
+    </div>
 </div>
-
 <script>
     // Зміна src для iframe при натисканні на кнопку "Переглянути прайс без картинок"
     document.querySelector('button:nth-child(2)').addEventListener('click', function () {
@@ -92,7 +161,7 @@
     document.querySelector('button:nth-child(1)').addEventListener('click', function () {
         document.getElementById('priceIframe').src = '/pdf/view/S'; // Оновлюємо src для перегляду PDF
     });
-</script>
 
+</script>
 </body>
 </html>

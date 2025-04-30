@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.Optional;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -96,6 +97,13 @@ public class ExcelServiceImpl implements ExcelService {
                     .append(".download-bar { position: fixed; top: 0; width: 100%; background: #6F4E37; color: white; padding: 10px 0; text-align: center; z-index: 2; }")
                     .append(".download-bar a { color: white; text-decoration: none; font-size: 18px; padding: 10px 20px; background: #4B3621; border-radius: 5px; transition: 0.3s; }")
                     .append(".download-bar a:hover { background: #3a2617; }")
+                    .append(".promo-row { background: #d2b48c; font-weight: bold; }") // Світло-коричневий фон (теплий)
+                    .append("@keyframes blink {")
+                    .append("  0% { background: #d2b48c; }") // Початковий відтінок (тепло-коричневий)
+                    .append("  50% { background: #b8865b; }") // Темніший теплий коричневий
+                    .append("  100% { background: #d2b48c; }") // Повернення до початкового
+                    .append("}")
+                    .append(".promo-row { animation: blink 2s infinite alternate; }") // Плавне блимання кожні 2 секунди
                     .append("</style></head><body>");
 
             // Додаємо панель завантаження
@@ -119,11 +127,19 @@ public class ExcelServiceImpl implements ExcelService {
                         html.append("<thead>");
                     }
 
-                    html.append("<tr>");
+                    boolean isPromo = false; // Перевіряємо, чи є в рядку слово "акція"
+                    Cell promoCell = row.getCell(4); // 4-та комірка (індекс 3)
+                    if (promoCell != null && promoCell.getCellType() == CellType.STRING) {
+                        String cellValue = promoCell.getStringCellValue().trim().toLowerCase();
+                        if (cellValue.contains("акція")) {
+                            isPromo = true;
+                        }
+                    }
+
+                    html.append("<tr" + (isPromo ? " class='promo-row'" : "") + ">");
 
                     for (int cellIndex = 2; cellIndex < row.getPhysicalNumberOfCells(); cellIndex++) {
                         Cell cell = row.getCell(cellIndex);
-
                         html.append("<td>");
                         if (cell != null) {
                             switch (cell.getCellType()) {
@@ -153,6 +169,7 @@ public class ExcelServiceImpl implements ExcelService {
 
                     rowIndex++;
                 }
+
             }
 
             html.append("</table></div></body></html>");
