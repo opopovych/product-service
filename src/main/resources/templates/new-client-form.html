@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запит на доступ до прайсу</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 40px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to right, #6F4E37, #3E2723);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            width: 95%;
+            max-width: 700px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            color: #3E2723;
+        }
+
+        h1 {
+            text-align: center;
+            color: #6F4E37;
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, textarea, select {
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        button {
+            background-color: #6F4E37;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background-color: #4B3621;
+            transform: scale(1.03);
+        }
+
+        .success-message {
+            color: green;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .form-container {
+                padding: 20px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h1>Запит на доступ до прайсу</h1>
+    <form action="/new-client/request" method="post" th:object="${clientRequest}">
+        <div>
+            <label>Прізвище</label>
+            <input type="text" th:field="*{lastName}" required>
+        </div>
+
+        <div>
+            <label>Ім’я</label>
+            <input type="text" th:field="*{firstName}" required>
+        </div>
+
+        <div>
+            <label>По батькові</label>
+            <input type="text" th:field="*{middleName}">
+        </div>
+
+        <div>
+            <label>Місто</label>
+            <input type="text" th:field="*{city}" required>
+        </div>
+
+        <div>
+            <label>Телефон (Viber)</label>
+            <input type="text" th:field="*{phone}" required>
+        </div>
+
+        <div>
+            <label>Email (необов’язково)</label>
+            <input type="email" th:field="*{email}">
+        </div>
+
+        <div>
+            <label>Компанія (якщо є)</label>
+            <input type="text" th:field="*{companyName}">
+        </div>
+
+        <div>
+            <label>Сума закупки щомісяця (грн)</label>
+            <input type="number" th:field="*{monthlyAmount}" required>
+        </div>
+
+        <div>
+            <label>Звідки про нас дізнались?</label>
+            <input type="text" th:field="*{whereFindUs}">
+        </div>
+
+        <div>
+            <label>ЄДРПОУ / ІПН</label>
+            <input type="text" th:field="*{taxId}">
+        </div>
+
+        <div>
+            <label>Коментар</label>
+            <textarea rows="3" th:field="*{comment}"></textarea>
+        </div>
+
+        <button type="submit">Надіслати запит</button>
+    </form>
+
+    <div class="success-message" th:if="${message}" th:text="${message}"></div>
+</div>
+
+</body>
+</html>

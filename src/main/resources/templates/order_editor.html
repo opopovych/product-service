@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор Замовлень</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .loading-message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #555;
+            margin-top: 50px;
+        }
+
+        .error-message {
+            text-align: center;
+            font-size: 1.2em;
+            color: #e74c3c;
+            margin-top: 50px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #fff;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #4CAF50; /* Зелений заголовок */
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .category-row {
+            background-color: #e0f2f1; /* Світло-зелений для категорій */
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #2e7d32;
+        }
+
+        input[type="number"] {
+            width: 70px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            -moz-appearance: textfield; /* Remove arrows in Firefox */
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .order-summary {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .order-actions {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .order-actions button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            background-color: #007bff; /* Синя кнопка */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .order-actions button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Редактор Замовлень</h1>
+
+    <div id="loading" class="loading-message">Завантаження товарів...</div>
+    <div id="error" class="error-message" style="display: none;">Помилка завантаження товарів. Спробуйте пізніше.</div>
+
+    <table id="productsTable" style="display: none;">
+        <thead>
+        <tr>
+            <th>Категорія</th>
+            <th>Код</th>
+            <th>Назва товару</th>
+            <th>Ціна (грн.)</th>
+            <th>Кількість</th>
+            <th>Сума (грн.)</th>
+        </tr>
+        </thead>
+        <tbody id="productsTableBody">
+        </tbody>
+    </table>
+
+    <div class="order-summary" style="display: none;">
+        Загальна сума замовлення: <span id="totalOrderAmount">0.00</span> грн.
+    </div>
+
+    <div class="order-actions" style="display: none;">
+        <button id="placeOrderBtn">Розмістити Замовлення</button>
+    </div>
+</div>
+
+<script>
+        const productsTableBody = document.getElementById('productsTableBody');
+        const totalOrderAmountSpan = document.getElementById('totalOrderAmount');
+        const productsTable = document.getElementById('productsTable');
+        const orderSummaryDiv = document.querySelector('.order-summary');
+        const orderActionsDiv = document.querySelector('.order-actions');
+        const loadingMessage = document.getElementById('loading');
+        const errorMessage = document.getElementById('error');
+        const placeOrderBtn = document.getElementById('placeOrderBtn');
+
+        let products = []; // Масив для зберігання завантажених товарів
+        let quantities = {}; // Об'єкт для зберігання кількостей за productId/code
+        let previousCategory = null; // Для групування по категоріях
+
+        // Функція для завантаження товарів з бекенду
+        async function fetchProducts() {
+            try {
+                loadingMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+
+                // Замініть 'latest' на конкретний ID, якщо потрібно
+                const response = await fetch('/api/products/latest');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                products = await response.json();
+                renderProducts();
+                productsTable.style.display = 'table';
+                orderSummaryDiv.style.display = 'block';
+                orderActionsDiv.style.display = 'block';
+                loadingMessage.style.display = 'none';
+
+            } catch (error) {
+                console.error('Помилка при завантаженні товарів:', error);
+                loadingMessage.style.display = 'none';
+                errorMessage.style.display = 'block';
+            }
+        }
+
+        // Функція для відображення товарів у таблиці
+        function renderProducts() {
+            productsTableBody.innerHTML = ''; // Очищаємо таблицю перед заповненням
+            previousCategory = null; // Скидаємо категорію перед рендерингом
+
+            products.forEach(product => {
+                // Додаємо рядок категорії, якщо вона змінилася
+                if (product.category && product.category !== previousCategory) {
+                    const categoryRow = document.createElement('tr');
+                    categoryRow.classList.add('category-row');
+                    categoryRow.innerHTML = `<td colspan="6">${product.category}</td>`;
+                    productsTableBody.appendChild(categoryRow);
+                    previousCategory = product.category;
+                }
+
+                const row = document.createElement('tr');
+                const productId = product.code; // Використовуємо код як унікальний ID для форми
+
+                row.innerHTML = `
+                    <td>${product.category || ''}</td>
+                    <td>${product.code}</td>
+                    <td>${product.name}</td>
+                    <td>${product.price.toFixed(2)}</td>
+                    <td>
+                        <input type="number"
+                               min="0"
+                               value="${quantities[productId] || 0}"
+                               data-product-id="${productId}"
+                               data-product-price="${product.price}"
+                               class="quantity-input">
+                    </td>
+                    <td class="item-subtotal" data-product-id="${productId}">0.00</td>
+                `;
+                productsTableBody.appendChild(row);
+            });
+
+            // Додаємо слухачів подій для полів введення кількості
+            document.querySelectorAll('.quantity-input').forEach(input => {
+                input.addEventListener('input', updateOrder);
+                input.addEventListener('change', updateOrder); // Для blur-події
+            });
+
+            updateTotalOrderAmount(); // Оновлюємо суму після рендерингу
+        }
+
+        // Функція для оновлення замовлення при зміні кількості
+        function updateOrder(event) {
+            const input = event.target;
+            const productId = input.dataset.productId;
+            const price = parseFloat(input.dataset.productPrice);
+            let quantity = parseInt(input.value);
+
+            if (isNaN(quantity) || quantity < 0) {
+                quantity = 0;
+                input.value = 0; // Встановлюємо 0, якщо невалідне значення
+            }
+
+            quantities[productId] = quantity;
+
+            // Оновлюємо проміжну суму для цього товару
+            const subtotalElement = document.querySelector(`.item-subtotal[data-product-id="${productId}"]`);
+            if (subtotalElement) {
+                subtotalElement.textContent = (price * quantity).toFixed(2);
+            }
+
+            updateTotalOrderAmount();
+        }
+
+        // Функція для оновлення загальної суми замовлення
+        function updateTotalOrderAmount() {
+            let total = 0;
+            products.forEach(product => {
+                const productId = product.code;
+                const quantity = quantities[productId] || 0;
+                total += product.price * quantity;
+            });
+            totalOrderAmountSpan.textContent = total.toFixed(2);
+        }
+
+        // Обробник для кнопки "Розмістити Замовлення"
+        placeOrderBtn.addEventListener('click', () => {
+            const orderItems = [];
+            for (const productId in quantities) {
+                const quantity = quantities[productId];
+                if (quantity > 0) {
+                    const product = products.find(p => p.code === productId);
+                    if (product) {
+                        orderItems.push({
+                            productId: product.code,
+                            productName: product.name,
+                            quantity: quantity,
+                            pricePerUnit: product.price,
+                            subtotal: (product.price * quantity).toFixed(2)
+                        });
+                    }
+                }
+            }
+
+            const totalAmount = parseFloat(totalOrderAmountSpan.textContent);
+
+            const order = {
+                orderDate: new Date().toISOString().slice(0, 10), // Сьогоднішня дата
+                items: orderItems,
+                totalAmount: totalAmount
+            };
+
+            console.log('Дані замовлення для відправки на бекенд:', order);
+
+            // Тут ви можете відправити об'єкт `order` на ваш бекенд за допомогою fetch() або XMLHttpRequest
+            // Приклад:
+            /*
+            fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(order),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Замовлення успішно розміщено:', data);
+                alert('Ваше замовлення успішно розміщено!');
+                // Можна очистити форму або перенаправити користувача
+            })
+            .catch((error) => {
+                console.error('Помилка при розміщенні замовлення:', error);
+                alert('Помилка при розміщенні замовлення. Спробуйте ще раз.');
+            });
+            */
+           alert('Замовлення "розміщено" (дані виведені в консоль)!');
+        });
+
+        // Завантажуємо товари при завантаженні сторінки
+        document.addEventListener('DOMContentLoaded', fetchProducts);
+    </script>
+</body>
+</html>
