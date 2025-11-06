@@ -4,18 +4,21 @@ import com.example.productservice.model.PdfFile;
 import com.example.productservice.repository.PdfFileRepository;
 import com.example.productservice.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,15 +37,20 @@ public class PdfFileController {
                                             @RequestParam("fileM") MultipartFile fileM,
                                             @RequestParam("fileS") MultipartFile fileS) {
         try {
-            pdfService.uploadPdfToDb("L", fileL);
-            pdfService.uploadPdfToDb("M", fileM);
-            pdfService.uploadPdfToDb("S", fileS);
+            if (fileL != null && !fileL.isEmpty()) {
+                pdfService.uploadPdfToDb("L", fileL);
+            }
+            if (fileM != null && !fileM.isEmpty()) {
+                pdfService.uploadPdfToDb("M", fileM);
+            }
+            if (fileS != null && !fileS.isEmpty()) {
+                pdfService.uploadPdfToDb("S", fileS);
+            }
             return ResponseEntity.ok("Файли успішно завантажено!");
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error uploading file: " + e.getMessage());
         }
     }
-
 
 
     // Перегляд актуального PDF прайса
@@ -53,12 +61,16 @@ public class PdfFileController {
 
         LocalDate time = pdfFileRepository.findById(id).get().getUploadDate();
         model.addAttribute("pdfDate", pdfFile1.map(PdfFile::getUploadDate).orElse(null));
-        System.out.println(time.toString());
+
+        String filename = "Прайс-ЄвроКава (" + time.toString() + ")";
+        String encodedFilename = URLEncoder.encode(filename, StandardCharsets.UTF_8)
+                .replaceAll("\\+", "%20");
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename*=UTF-8''" + encodedFilename)
                 .body(pdfFile.getFileData());
     }
-
 
 
     @GetMapping("/upload/list")

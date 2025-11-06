@@ -16,8 +16,8 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return new InMemoryUserDetailsManager(
-                User.withUsername("*****")
-                        .password(passwordEncoder().encode("*******"))
+                User.withUsername("admin")
+                        .password(passwordEncoder().encode("adminpass"))
                         .roles("ADMIN")
                         .build()
         );
@@ -34,11 +34,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Вимкнення CSRF, якщо не потрібне
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/viewL", "/viewM", "/viewS","/pdf/view/L",
-                                "/excel/view/L","/photo/view/L","/pdf/view/M",
-                                "/excel/view/M","/photo/view/M","/pdf/view/S",
-                                "/excel/view/S","/photo/view/S","/excel/download/L",
-                                "/excel/download/M","/excel/download/S",
-                                "/css/**", "/js/**", "/images/**", "/coffee-logo.png") // Додано нові шляхи
+                                "/html/view/L","/excel/view/L","/photo/view/L","/pdf/view/M",
+                                "/html/view/M","/excel/view/M","/photo/view/M","/pdf/view/S",
+                                "/new-client","/new-client/form","/new-client/range","/new-client/request",
+                                "/html/view/S","/excel/view/S","/photo/view/S","/excel/download/L",
+                                "/excel/download/M","/excel/download/S","/zp.png",
+                                "/css/**", "/js/**", "/images/**", "/evro_kava_logo.svg") // Додано нові шляхи
                         .permitAll() // Дозволяємо доступ до головної сторінки та нових шляхів без аутентифікації
                         .requestMatchers("/upload/**").hasRole("ADMIN") // Доступ до /upload тільки для адміністраторів
                         .anyRequest().authenticated() // Інші запити потребують аутентифікації

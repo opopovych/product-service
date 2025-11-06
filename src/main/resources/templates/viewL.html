@@ -5,25 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Переглянути прайс - ЄвроКава</title>
     <style>
+     /* Повний екранний canvas, не заважає клікам на елементи під ним */
+    html,body{height:100%;margin:0}
+    #snow-canvas{
+      position:fixed;
+      left:0;top:0;width:100%;height:100%;pointer-events:none;z-index:9999;
+    }
+    /* Для користувачів, які вимагають зменшення руху */
+    @media (prefers-reduced-motion: reduce){
+      #snow-canvas{display:none}
+    }
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 40px 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            background: linear-gradient(to right, #6F4E37, #3E2723);
+            background: url("/images/newyear-bg.jpg") no-repeat center center fixed;
+  background-size: cover; /* щоб картинка розтягувалась на весь екран */
+  margin: 0;
+  font-family: Arial, sans-serif;
             text-align: center;
             color: white;
         }
 
         .container {
             width: 95%;
-            max-width: 1000px;
-            padding: 30px;
-            background-color: white;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: rgba(255, 255, 255, 0); /* білий фон з прозорістю */
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 40px auto;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* легка тінь для глибини */
             border-radius: 12px;
             color: black;
         }
@@ -32,25 +46,55 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 50px;
+            margin-bottom: 100px;
             padding: 0 10px;
         }
 
-        .company-name {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #6F4E37;
-        }
-
         .logo {
+            width: 300px;
+        }
+        .logoz {
             width: 150px;
         }
-
         h1 {
             font-size: 2em;
             margin-bottom: 20px;
             color: #6F4E37;
         }
+.partner-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 160px;
+}
+.ec-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 370px;
+}
+
+.partner-text {
+    font-size: 0.8em;
+    color: #6F4E37;
+    margin-top: 8px;
+    text-align: center;
+    line-height: 1.2;
+}
+.ec-text {
+    font-size: 1.8em;
+    color: #6F4E37;
+    margin-top: 8px;
+    text-align: center;
+    line-height: 1.2;
+}
+.partner-phone {
+    display: inline-block;
+    margin-top: 8px;
+    font-weight: bold;
+    color: #6F4E37;
+    font-size: 0.95em;
+}
 
         .buttons {
             display: flex;
@@ -113,28 +157,56 @@
     </style>
 </head>
 <body>
-
+<script type="text/javascript" src="https://unpkg.com/jquery-snowfall@1.7.4/dist/snowfall.jquery.min.js" ></script>
+<script>
+  setTimeout(function (argument) {
+    $(document).snowfall({flakeCount : 100, minSize:1, maxSize:4, round: 4});
+  }, 1000);
+</script>
 <div class="container">
     <div class="header">
-        <div class="company-name">ЄвроКава</div>
-        <img th:src="@{/coffee-logo.png}" alt="Логотип кави" class="logo">
+        <div class="ec-info">
+            <img th:src="@{/evro_kava_logo.svg}" alt="Логотип кави" class="logo">
+            <p class="ec-text">
+                ЄвроКава
+            </p>
+        </div>
+
+        <div class="partner-info">
+            <a href="https://zahotilypoletily.com.ua/" target="_blank">
+                <img th:src="@{/zp.png}" alt="ZP логотип" class="logoz">
+            </a>
+            <p class="partner-text">
+                Наш партнер<br>
+                <strong>Бонус для клієнтів ЄвроКави<br>при замовленні туру</strong><br>
+                <a href="tel:+380965493992" class="partner-phone">+38 (096) 549 39 92</a>
+            </p>
+        </div>
     </div>
 
     <h1>Актуальний прайс</h1>
 
     <div class="buttons">
-        <div class="button-container">
+        <!--<div class="button-container">
             <button onclick="window.location.href='/pdf/view/L'">Прайс з фото асортименту</button>
             <p class="update-date"
-               th:text="${pdfDate != null ? 'Оновлено: ' + #temporals.format(pdfDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
+               th:text="${pdfDate != null ? 'Оновлено: ' + #temporals.format(pdfDate, 'dd MM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${pdfDate != null and #temporals.createNow().toLocalDate().isBefore(pdfDate.plusDays(1))} ? 'blink' : ''">
+
+            </p>
+        </div>-->
+        <div class="button-container">
+            <button onclick="window.location.href='/html/view/L'">Фото-прайс онлайн</button>
+            <p class="update-date"
+               th:text="${htmlDate != null ? 'Оновлено: ' + #temporals.format(htmlDate, 'dd MM yyyy') : 'Дата оновлення недоступна'}"
+               th:classappend="${htmlDate != null and #temporals.createNow().toLocalDate().isBefore(htmlDate.plusDays(1))} ? 'blink' : ''">
 
             </p>
         </div>
         <div class="button-container">
             <button onclick="window.location.href='/excel/view/L'">Прайс без фото асортименту</button>
             <p class="update-date"
-               th:text="${excelDate != null ? 'Оновлено: ' + #temporals.format(excelDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
+               th:text="${excelDate != null ? 'Оновлено: ' + #temporals.format(excelDate, 'dd MM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${excelDate != null and #temporals.createNow().toLocalDate().isBefore(excelDate.plusDays(1))} ? 'blink' : ''"
             >
             </p>
@@ -143,12 +215,152 @@
         <div class="button-container">
             <button onclick="window.location.href='/photo/view/L'">Останні оновлення асортименту</button>
             <p class="update-date"
-               th:text="${photoDate != null ? 'Оновлено: ' + #temporals.format(photoDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
+               th:text="${photoDate != null ? 'Оновлено: ' + #temporals.format(photoDate, 'dd MM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${photoDate != null and #temporals.createNow().toLocalDate().isBefore(photoDate.plusDays(1))} ? 'blink' : ''"
 >
             </p>
         </div>
     </div>
 </div>
+<canvas id="snow-canvas" aria-hidden="true"></canvas>
+
+<script>
+(function(){
+  const canvas = document.getElementById('snow-canvas');
+  const ctx = canvas.getContext('2d');
+
+  // Конфіг — регулюйте під свій сайт
+  const CONFIG = {
+    maxFlakes: 200,          // максимальна кількість пластівців
+    minSize: 1.5,            // мінімальний радіус
+    maxSize: 5.0,            // максимальний радіус
+    speed: 0.6,              // множник швидкості (0.2..2)
+    wind: 0.5,               // загальний зсув по горизонталі
+    sway: 1.2                // амплітуда хитання
+  };
+
+  let flakes = [];
+  let width = 0, height = 0;
+  let devicePixelRatio = Math.max(1, window.devicePixelRatio || 1);
+
+  function resize(){
+    devicePixelRatio = Math.max(1, window.devicePixelRatio || 1);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = Math.floor(width * devicePixelRatio);
+    canvas.height = Math.floor(height * devicePixelRatio);
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    // Підганяємо кількість пластівців під розмір екрану
+    const area = width * height;
+    const base = Math.round((CONFIG.maxFlakes * area) / (1920 * 1080));
+    ensureFlakes(Math.min(CONFIG.maxFlakes, Math.max(40, base)));
+  }
+
+  function rand(min, max){ return Math.random() * (max - min) + min; }
+
+  function createFlake(){
+    const size = rand(CONFIG.minSize, CONFIG.maxSize);
+    return {
+      x: rand(0, width),
+      y: rand(-height, 0),
+      r: size,
+      // швидкість падаючого
+      vy: rand(0.3, 1.2) * (size / CONFIG.maxSize) * CONFIG.speed * 1.2,
+      // горизонтальна швидкість (вітер)
+      vx: rand(-0.6, 0.6) * CONFIG.wind,
+      // кут для синусної коливальної компоненти
+      ang: rand(0, Math.PI * 2),
+      // швидкість зміни кута
+      angSpeed: rand(0.002, 0.01) * (CONFIG.sway),
+      // легка прозорість
+      alpha: rand(0.6, 1.0)
+    };
+  }
+
+  function ensureFlakes(n){
+    while(flakes.length < n) flakes.push(createFlake());
+    while(flakes.length > n) flakes.pop();
+  }
+
+  function update(dt){
+    for(let f of flakes){
+      f.ang += f.angSpeed * dt;
+      // додатковий горизонтальний рух як синус від кута
+      const sway = Math.sin(f.ang) * (f.r * 0.3) * CONFIG.sway;
+      f.x += (f.vx + sway * 0.02) * dt;
+      f.y += f.vy * dt;
+
+      // якщо пішов за межі — ресет зверху
+      if(f.y - f.r > height){
+        f.x = rand(0, width);
+        f.y = -f.r - rand(0, height * 0.2);
+      }
+      if(f.x - f.r > width + 50) f.x = -50;
+      if(f.x + f.r < -50) f.x = width + 50;
+    }
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,width,height);
+    for(let f of flakes){
+      ctx.save();
+      ctx.globalAlpha = f.alpha;
+      // легкий градієнт для пластівця
+      const g = ctx.createRadialGradient(f.x, f.y, 0, f.x, f.y, f.r*1.6);
+      g.addColorStop(0, 'rgba(255,255,255,0.95)');
+      g.addColorStop(0.6, 'rgba(240,240,255,0.9)');
+      g.addColorStop(1, 'rgba(200,200,210,0.0)');
+      ctx.fillStyle = g;
+      // круглий пластівець
+      ctx.beginPath();
+      ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // Простий лічильник часу для нормалізації швидкостей
+  let last = performance.now();
+  function frame(now){
+    const dt = Math.min(60, (now - last)) / 16.6667; // 1 = ~60fps
+    update(dt);
+    draw();
+    last = now;
+    requestAnimationFrame(frame);
+  }
+
+  // Початкові дії
+  resize();
+  window.addEventListener('resize', resize);
+
+  // Зупиняємо анімацію при видимості вкладки false (енергозбереження)
+  let hidden = false;
+  document.addEventListener('visibilitychange', ()=>{
+    hidden = document.hidden;
+    if(!hidden){ last = performance.now(); requestAnimationFrame(frame); }
+  });
+
+  // Якщо користувач хоче зменшити рух — поважаємо
+  const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(media.matches) {
+    canvas.style.display = 'none';
+  } else {
+    requestAnimationFrame(frame);
+  }
+
+  // Додаткова опція: кліком по canvas можна тимчасово розігнати сніг
+  canvas.addEventListener('click', ()=>{
+    for(let f of flakes){ f.vy *= 1.6; }
+    setTimeout(()=>{ for(let f of flakes){ f.vy /= 1.6; } }, 900);
+  });
+
+  // Ініціалізація пластівців
+  ensureFlakes(CONFIG.maxFlakes);
+
+})();
+</script>
+
 </body>
 </html>

@@ -1,9 +1,11 @@
 package com.example.productservice.controlers;
 
 import com.example.productservice.model.ExcelFile;
+import com.example.productservice.model.HtmlPrice;
 import com.example.productservice.model.PdfFile;
 import com.example.productservice.model.Photo;
 import com.example.productservice.repository.ExcelFileRepository;
+import com.example.productservice.repository.HtmlPriceRepository;
 import com.example.productservice.repository.PdfFileRepository;
 import com.example.productservice.repository.PhotoRepository;
 import java.time.LocalDate;
@@ -29,14 +31,18 @@ public class CustomerController {
     private ExcelFileRepository excelFileRepository;
     @Autowired
     private PhotoRepository photoRepository;
+    @Autowired
+    private HtmlPriceRepository htmlPriceRepository;
 
     @GetMapping("/viewL")
     public String openVewLPage(Model model){
         Optional<PdfFile> pdfFile1 = pdfFileRepository.findById("L");
         Optional<ExcelFile> excelFile = excelFileRepository.findById("L");
         Optional<Photo> photoFile = photoRepository.findById("L");
+        Optional<HtmlPrice> htmlPrice = htmlPriceRepository.findById("L");
 
         model.addAttribute("pdfDate", pdfFile1.map(PdfFile::getUploadDate).orElse(null));
+        model.addAttribute("htmlDate", htmlPrice.map(HtmlPrice::getUploadDate).orElse(null));
         model.addAttribute("excelDate", excelFile.map(ExcelFile::getUploadDate).orElse(null));
         model.addAttribute("photoDate", photoFile.map(Photo::getUploadDate).orElse(null));
         return "viewL";
@@ -46,8 +52,10 @@ public class CustomerController {
         Optional<PdfFile> pdfFile1 = pdfFileRepository.findById("M");
         Optional<ExcelFile> excelFile = excelFileRepository.findById("M");
         Optional<Photo> photoFile = photoRepository.findById("M");
+        Optional<HtmlPrice> htmlPrice = htmlPriceRepository.findById("M");
 
         model.addAttribute("pdfDate", pdfFile1.map(PdfFile::getUploadDate).orElse(null));
+        model.addAttribute("htmlDate", htmlPrice.map(HtmlPrice::getUploadDate).orElse(null));
         model.addAttribute("excelDate", excelFile.map(ExcelFile::getUploadDate).orElse(null));
         model.addAttribute("photoDate", photoFile.map(Photo::getUploadDate).orElse(null));
         model.addAttribute("loadingDate", loadingDate);
@@ -59,8 +67,10 @@ public class CustomerController {
         Optional<PdfFile> pdfFile1 = pdfFileRepository.findById("S");
         Optional<ExcelFile> excelFile = excelFileRepository.findById("S");
         Optional<Photo> photoFile = photoRepository.findById("S");
+        Optional<HtmlPrice> htmlPrice = htmlPriceRepository.findById("S");
 
         model.addAttribute("pdfDate", pdfFile1.map(PdfFile::getUploadDate).orElse(null));
+        model.addAttribute("htmlDate", htmlPrice.map(HtmlPrice::getUploadDate).orElse(null));
         model.addAttribute("excelDate", excelFile.map(ExcelFile::getUploadDate).orElse(null));
         model.addAttribute("photoDate", photoFile.map(Photo::getUploadDate).orElse(null));
         return "viewS";

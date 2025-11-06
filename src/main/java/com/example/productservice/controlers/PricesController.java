@@ -1,9 +1,11 @@
 package com.example.productservice.controlers;
 
 import com.example.productservice.model.ExcelFile;
+import com.example.productservice.model.HtmlPrice;
 import com.example.productservice.model.PdfFile;
 import com.example.productservice.model.Photo;
 import com.example.productservice.repository.ExcelFileRepository;
+import com.example.productservice.repository.HtmlPriceRepository;
 import com.example.productservice.repository.PdfFileRepository;
 import com.example.productservice.repository.PhotoRepository;
 import java.util.List;
@@ -20,13 +22,17 @@ public class PricesController {
     private PhotoRepository photoRepository;
     @Autowired
     private ExcelFileRepository excelFileRepository;
+    @Autowired
+    private HtmlPriceRepository htmlPriceRepository;
     @GetMapping("/prices")
     public String getPricesData(Model model) {
         List<PdfFile> listPdf = pdfFileRepository.findAll();
+        List<HtmlPrice> listHtml = htmlPriceRepository.findAll();
         List<ExcelFile> listExcel = excelFileRepository.findAll();
         List<Photo> listPhoto = photoRepository.findAll();
 
         model.addAttribute("pdfFiles", listPdf);
+        model.addAttribute("htmlFiles", listHtml);
         model.addAttribute("excelFiles", listExcel);
         model.addAttribute("photos", listPhoto);
 

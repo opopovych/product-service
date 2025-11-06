@@ -1,16 +1,20 @@
 package com.example.productservice.service.impl;
 
+import com.example.productservice.model.CategoryProducts;
 import com.example.productservice.model.ExcelFile;
+import com.example.productservice.model.Product;
 import com.example.productservice.repository.ExcelFileRepository;
 import com.example.productservice.service.ExcelService;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,26 +44,26 @@ public class ExcelServiceImpl implements ExcelService {
     }
 
     @Override
-        public ResponseEntity<String> viewExcelFromDB(String id) {
-            ExcelFile latestExcel = excelFileRepository.findById(id)
-                    .orElse(null); // Якщо не знайдено, то буде null
+    public ResponseEntity<String> viewExcelFromDB(String id) {
+        ExcelFile latestExcel = excelFileRepository.findById(id)
+                .orElse(null); // Якщо не знайдено, то буде null
 
-            if (latestExcel != null) {
-                byte[] excelContent = latestExcel.getFileData();
-                String htmlContent = convertExcelToHtml(excelContent,id);
+        if (latestExcel != null) {
+            byte[] excelContent = latestExcel.getFileData();
+            String htmlContent = convertExcelToHtml(excelContent, id);
 
-                return ResponseEntity.ok()
-                        .contentType(MediaType.TEXT_HTML)
-                        .header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
-                        .body(htmlContent);
-            } else {
-                String errorMessage = "<html><body><h1>Файл не знайдено</h1><p>Останній завантажений прайс відсутній.</p></body></html>";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .contentType(MediaType.TEXT_HTML)
-                        .header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
-                        .body(errorMessage);
-            }
+            return ResponseEntity.ok()
+                    .contentType(MediaType.TEXT_HTML)
+                    .header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+                    .body(htmlContent);
+        } else {
+            String errorMessage = "<html><body><h1>Файл не знайдено</h1><p>Останній завантажений прайс відсутній.</p></body></html>";
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .contentType(MediaType.TEXT_HTML)
+                    .header(HttpHeaders.CONTENT_TYPE, "text/html; charset=UTF-8")
+                    .body(errorMessage);
         }
+    }
 
     @Override
     public ResponseEntity<ByteArrayResource> downloadExcel(String id) {
@@ -77,7 +81,6 @@ public class ExcelServiceImpl implements ExcelService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
-
 
     private String convertExcelToHtml(byte[] fileData, String fileName) {
         StringBuilder html = new StringBuilder();
@@ -135,7 +138,6 @@ public class ExcelServiceImpl implements ExcelService {
                             isPromo = true;
                         }
                     }
-
                     html.append("<tr" + (isPromo ? " class='promo-row'" : "") + ">");
 
                     for (int cellIndex = 2; cellIndex < row.getPhysicalNumberOfCells(); cellIndex++) {
@@ -178,5 +180,44 @@ public class ExcelServiceImpl implements ExcelService {
         }
         return html.toString();
     }
+
+
+
+
+
+    private boolean isMergedCell(Sheet sheet, int rowIndex, int colIndex) {
+        for (int i = 0; i < sheet.getNumMergedRegions(); i++) {
+            CellRangeAddress region = sheet.getMergedRegion(i);
+            if (region.isInRange(rowIndex, colIndex)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String getStringValue(Cell cell) {
+        if (cell == null) return "";
+        if (cell.getCellType() == CellType.STRING) {
+            return cell.getStringCellValue().trim();
+        } else if (cell.getCellType() == CellType.NUMERIC) {
+            return String.valueOf((int) cell.getNumericCellValue());
+        }
+        return "";
+    }
+
+    private double getDoubleValue(Cell cell) {
+        if (cell == null) return 0.0;
+        if (cell.getCellType() == CellType.NUMERIC) {
+            return cell.getNumericCellValue();
+        } else if (cell.getCellType() == CellType.STRING) {
+            try {
+                return Double.parseDouble(cell.getStringCellValue().replace(",", ".").trim());
+            } catch (NumberFormatException e) {
+                return 0.0;
+            }
+        }
+        return 0.0;
+    }
+
 
 }
