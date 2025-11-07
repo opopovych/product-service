@@ -86,25 +86,41 @@ public class ExcelServiceImpl implements ExcelService {
         StringBuilder html = new StringBuilder();
         try (InputStream inputStream = new ByteArrayInputStream(fileData)) {
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
-            html.append("<html><head><style>")
-                    .append("body { font-family: Arial, sans-serif; margin: 0; padding-top: 60px; background-color: #f8f9fa; text-align: center; }")
-                    .append(".table-container { width: 90%; max-width: 1200px; margin: auto; overflow-x: auto; background: white; padding: 15px;")
+            html.append("<html><head><style>");
+            html.append("body { margin: 0;\n" +
+                            "    padding: 0;\n" +
+                            "    font-family: 'Poppins', sans-serif;\n" +
+                            "    color: #fff;\n" +
+                            "    overflow-x: hidden;\n" +
+                            "    height: 100vh; }\n")
+                    .append("#bgVideo { position: fixed;\n" +
+                            "    top: 50%;\n" +
+                            "    left: 50%;\n" +
+                            "    min-width: 100%;\n" +
+                            "    min-height: 100%;\n" +
+                            "    width: auto;\n" +
+                            "    height: auto;\n" +
+                            "    z-index: -1;\n" +
+                            "    transform: translate(-50%, -50%);\n" +
+                            "    object-fit: cover;\n" +
+                            "    filter: brightness(0.6); }")
+                    .append(".table-container { width: 90%; max-width: 1200px; margin: auto; overflow-x: auto; background: transparent; padding: 45px;")
                     .append("border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }")
-                    .append("table { width: 100%; border-collapse: collapse; margin-top: 10px; }")
-                    .append("th { background-color: #6F4E37; color: white; padding: 12px; text-align: left; font-size: 16px; }")
-                    .append("td { padding: 10px; border: 1px solid #ddd; font-size: 14px; }")
-                    .append("tr:nth-child(even) { background-color: #f2f2f2; }")
-                    .append("tr:nth-child(odd) { background-color: #ffffff; }")
-                    .append("tr:first-child th { position: sticky; top: 60px; background: #6F4E37; color: white; z-index: 1; }")
+                    .append("table { width: 100%;border: 2px solid #bca57f; border-collapse: collapse; margin-top: 10px; }")
+                    .append("th {color: white;border: 1px solid #bca57f; padding: 12px; text-align: left; font-size: 16px; }")
+                    .append("td { padding: 10px; border: 1px solid #bca57f;color: #d9c8b7; font-size: 14px; }")
+                    .append("tr:nth-child(even)")
+                    .append("tr:nth-child(odd)")
+                    .append("tr:first-child th { position: sticky; top: 60px; color: white; z-index: 1; }")
                     .append(".category-row { background: #d1bfa3; font-weight: bold; text-transform: uppercase; font-size: 15px; }")
-                    .append(".download-bar { position: fixed; top: 0; width: 100%; background: #6F4E37; color: white; padding: 10px 0; text-align: center; z-index: 2; }")
-                    .append(".download-bar a { color: white; text-decoration: none; font-size: 18px; padding: 10px 20px; background: #4B3621; border-radius: 5px; transition: 0.3s; }")
+                    .append(".download-bar { position: fixed; top: 0; width: 100%; background: transparent; color: #bca57f; padding: 10px 0; text-align: center; z-index: 2; }")
+                    .append(".download-bar a { color: #d9c8b7; text-decoration: none; font-size: 18px; padding: 10px 20px; background: #4B3621; border-radius: 5px; transition: 0.3s; }")
                     .append(".download-bar a:hover { background: #3a2617; }")
                     .append(".promo-row { background: #d2b48c; font-weight: bold; }") // Світло-коричневий фон (теплий)
                     .append("@keyframes blink {")
-                    .append("  0% { background: #d2b48c; }") // Початковий відтінок (тепло-коричневий)
+                    .append("  0% { background: transparent; }") // Початковий відтінок (тепло-коричневий)
                     .append("  50% { background: #b8865b; }") // Темніший теплий коричневий
-                    .append("  100% { background: #d2b48c; }") // Повернення до початкового
+                    .append("  100% { background: transparent; }") // Повернення до початкового
                     .append("}")
                     .append(".promo-row { animation: blink 2s infinite alternate; }") // Плавне блимання кожні 2 секунди
                     .append("</style></head><body>");
@@ -113,6 +129,11 @@ public class ExcelServiceImpl implements ExcelService {
             html.append("<div class='download-bar'>")
                     .append("<a href='/excel/download/" + fileName + "' download>⬇ Завантажити Excel</a>")
                     .append("</div>");
+            html.append("<video autoplay muted loop playsinline id=\"bgVideo\">\n")
+                    .append("    <source src=\"/video/coffee-bg.mp4\" type=\"video/mp4\">\n")
+                    .append("</video>\n")
+                    .append("<script>document.getElementById('bgVideo').playbackRate = 0.6;</script>");
+
 
             html.append("<div class='table-container'><table>");
 
