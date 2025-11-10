@@ -3,188 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
     <title>Переглянути прайс - ЄвроКава</title>
+
     <style>
+        /* Загальні стилі */
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 40px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: linear-gradient(to right, #6F4E37, #3E2723);
-            text-align: center;
-            color: white;
+            padding: 0;
+            font-family: "Poppins", sans-serif;
+            color: #fff;
+            overflow-x: hidden;
+            height: 100vh;
         }
 
+        /* Відео фон */
+        #bgVideo {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+            filter: brightness(0.6);
+        }
+
+        /* Напівпрозорий затемнюючий шар */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+        }
+
+        /* Основний контент */
         .container {
-            width: 95%;
-            max-width: 1000px;
-            padding: 30px;
-            background-color: white;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            color: black;
-        }
-
-                .header {
+            position: relative;
+            z-index: 1;
             display: flex;
-            justify-content: space-between;
+            flex-direction: column;
             align-items: center;
-            margin-bottom: 100px;
-            padding: 0 10px;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 0 20px;
         }
 
-        .logo {
-            width: 300px;
-        }
-        .logoz {
-            width: 150px;
-        }
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #6F4E37;
-        }
-.partner-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 160px;
-}
-.ec-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 370px;
-}
-
-.partner-text {
-    font-size: 0.8em;
-    color: #6F4E37;
-    margin-top: 8px;
-    text-align: center;
-    line-height: 1.2;
-}
-.ec-text {
-    font-size: 1.8em;
-    color: #6F4E37;
-    margin-top: 8px;
-    text-align: center;
-    line-height: 1.2;
-}
-.partner-phone {
-    display: inline-block;
-    margin-top: 8px;
-    font-weight: bold;
-    color: #6F4E37;
-    font-size: 0.95em;
-}
-
-
-        .buttons {
+        /* Логотипи */
+        .logos {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
         }
 
-        button {
-            flex: 1;
-            padding: 15px;
-            font-size: 1.2em;
-            background-color: #6F4E37;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+        .logos img {
+            max-height: 120px;
+            filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+            transition: transform 0.3s ease;
         }
 
-        button:hover {
-            background-color: #4B3621;
+        .logos img:hover {
             transform: scale(1.05);
         }
-        .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-.update-date {
-    font-size: 0.9em;
-    color: #6F4E37;
-    margin-top: 5px;
-}
-@keyframes blink-animation {
-    50% { opacity: 0; }
-}
+        /* Заголовок */
+        h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 3em;              /* великий і сучасний заголовок */
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-align: center;
 
-.blink {
-    animation: blink-animation 1s infinite !important;
-    font-weight: bold;
-    color: #6F4E37 !important; /* Помітний колір */
-}
+            /* Градієнт */
+            background: linear-gradient(270deg, #6F4E37, #D9A066, #6F4E37);
+            background-size: 600% 600%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
 
-.marquee {
-    display: inline-block; /* Робимо фон по ширині тексту */
-    background: #A67B5B; /* Темно-коричневий фон */
-    color: #3E2723;
-    padding: 5px 15px; /* Компактний відступ */
-    font-size: 1.5em; /* Збільшуємо текст */
-    font-weight: bold;
-    text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    border-radius: 8px; /* Округлення країв */
-    margin: 10px auto; /* Вирівнювання по центру */
-}
+            /* Тінь для читабельності на відео */
+            text-shadow: 1px 1px 6px rgba(0, 0, 0, 0.4);
 
-/* Ефект світіння */
-.marquee p {
-    animation: glow 1.5s infinite alternate;
-    margin: 0;
-    white-space: nowrap; /* Запобігає переносу тексту */
-}
+            /* Анімація градієнта */
+            animation: gradientAnimation 10s ease infinite;
+            margin-bottom: 20px;
+        }
 
-@keyframes glow {
-    from {
-        text-shadow: 0 0 5px #ffffff, 0 0 10px #d2b48c, 0 0 15px #a67b5b;
-    }
-    to {
-        text-shadow: 0 0 10px #ffffff, 0 0 20px #d2b48c, 0 0 30px #a67b5b;
-    }
-}
+        /* Анімація градієнта */
+        @keyframes gradientAnimation {
+            0% {background-position:0% 50%;}
+            50% {background-position:100% 50%;}
+            100% {background-position:0% 50%;}
+        }
 
-/* Медіа-запити для адаптивності */
-@media (max-width: 768px) {
-    .marquee {
-        font-size: 1.2em; /* Зменшуємо шрифт для менших екранів */
-        padding: 5px 10px; /* Зменшуємо відступи */
-    }
-}
 
-@media (max-width: 480px) {
-    .marquee {
-        font-size: 1em; /* Ще більше зменшуємо шрифт */
-        padding: 5px 8px; /* Відступи для дуже маленьких екранів */
-    }
-}
+        p.subtitle {
+            font-size: 1.1em;
+            color: #7d6b4d;
+            margin-bottom: 50px;
+        }
+        .marquee {
+            display: inline-block; /* Робимо фон по ширині тексту */
+            background: #A67B5B; /* Темно-коричневий фон */
+            color: #3E2723;
+            padding: 5px 15px; /* Компактний відступ */
+            font-size: 1.5em; /* Збільшуємо текст */
+            font-weight: bold;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            border-radius: 8px; /* Округлення країв */
+            margin: 10px auto; /* Вирівнювання по центру */
+        }
 
+        /* Ефект світіння */
+        .marquee p {
+            animation: glow 1.5s infinite alternate;
+            margin: 0;
+            white-space: nowrap; /* Запобігає переносу тексту */
+        }
+
+        /* Кнопки */
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .buttons button {
+            background: linear-gradient(135deg, #6F4E37, #3E2723);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            color: #bca57f;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .buttons button:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #8b5e3c, #4b3621);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Нижній текст */
+        .partner {
+            position: absolute;
+            bottom: 30px;
+            text-align: center;
+            width: 100%;
+            font-size: 0.9em;
+            color: #f5f2ef;
+        }
+
+        .partner a {
+            color: #ffcc80;
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .update-date {
+            font-size: 0.9em;
+            color: #6F4E37;
+            margin-top: 5px;
+        }
+
+        /* Адаптив */
         @media (max-width: 768px) {
-            .header {
+            .logos {
                 flex-direction: column;
-                align-items: center;
-                text-align: center;
+                gap: 25px;
             }
-            .buttons {
-                flex-direction: column;
+            h1 {
+                font-size: 1.8em;
             }
-            button {
+            .buttons button {
                 width: 100%;
+                font-size: 1em;
+            }
+            .marquee {
+                font-size: 1.2em; /* Зменшуємо шрифт для менших екранів */
+                padding: 5px 10px; /* Зменшуємо відступи */
             }
         }
     </style>
 </head>
 <body>
+
+<!-- Відео фон -->
+<video autoplay muted loop playsinline id="bgVideo">
+    <source th:src="@{/video/coffee-bg.mp4}" src="video/coffee-bg.mp4" type="video/mp4">
+</video>
+<script>
+    // сповільнюємо відтворення у 2 рази
+    const video = document.getElementById('bgVideo');
+    video.playbackRate = 0.5;  // 1 = нормальна швидкість, 0.5 = у 2 рази повільніше
+</script>
+<div class="overlay"></div>
 
 <div class="container">
     <div class="marquee">
@@ -194,79 +219,43 @@
         <p th:if="${loadingDate == null or deliveryDate == null}">Очікуйте новий планований рейс</p>
     </div>
 
-
-
-
-
-    <div class="header">
-        <div class="ec-info">
-            <img th:src="@{/evro_kava_logo.svg}" alt="Логотип кави" class="logo">
-            <p class="ec-text">
-                ЄвроКава
-            </p>
-        </div>
-
-        <div class="partner-info">
-            <a href="https://zahotilypoletily.com.ua/" target="_blank">
-                <img th:src="@{/zp.png}" alt="ZP логотип" class="logoz">
-            </a>
-            <p class="partner-text">
-                Наш партнер<br>
-                <strong>Бонус для клієнтів ЄвроКави<br>при замовленні туру</strong><br>
-                <a href="tel:+380965493992" class="partner-phone">+38 (096) 549 39 92</a>
-            </p>
-        </div>
+    <div class="logos">
+        <img th:src="@{/evro_kava_logo.svg}" alt="ЄвроКава логотип">
+        <a href="https://zahotilypoletily.com.ua/" target="_blank">
+            <img th:src="@{/zp.png}" alt="ZP партнер">
+        </a>
     </div>
 
-    <h1>Актуальний прайс</h1>
+    <h1>Онлайн прайси ЄвроКави</h1>
+    <p class="subtitle">Обирай свій формат перегляду — швидко, зручно, актуально</p>
 
     <div class="buttons">
-        <!--<div class="button-container">
-            <button onclick="window.location.href='/pdf/view/M'">Прайс з фото асортименту</button>
-            <p class="update-date"
-               th:text="${pdfDate != null ? 'Оновлено: ' + #temporals.format(pdfDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
-               th:classappend="${pdfDate != null and #temporals.createNow().toLocalDate().isBefore(pdfDate.plusDays(1))} ? 'blink' : ''">
-
-            </p>
-        </div>-->
-
         <div class="button-container">
-            <button onclick="window.location.href='/html/view/M'">Фото-прайс онлайн</button>
+            <button onclick="window.location.href='/html/view/L'">Фото-прайс онлайн</button>
             <p class="update-date"
                th:text="${htmlDate != null ? 'Оновлено: ' + #temporals.format(htmlDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${htmlDate != null and #temporals.createNow().toLocalDate().isBefore(htmlDate.plusDays(1))} ? 'blink' : ''">
-
             </p>
         </div>
+
         <div class="button-container">
-            <button onclick="window.location.href='/excel/view/M'">Прайс без фото асортименту</button>
+            <button onclick="window.location.href='/excel/view/L'">Прайс без фото асортименту</button>
             <p class="update-date"
                th:text="${excelDate != null ? 'Оновлено: ' + #temporals.format(excelDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
-               th:classappend="${excelDate != null and #temporals.createNow().toLocalDate().isBefore(excelDate.plusDays(1))} ? 'blink' : ''"
-            >
+               th:classappend="${excelDate != null and #temporals.createNow().toLocalDate().isBefore(excelDate.plusDays(1))} ? 'blink' : ''">
             </p>
         </div>
 
         <div class="button-container">
-            <button onclick="window.location.href='/photo/view/M'">Останні оновлення асортименту</button>
+            <button onclick="window.location.href='/photo/view/L'">Останні оновлення асортименту</button>
             <p class="update-date"
                th:text="${photoDate != null ? 'Оновлено: ' + #temporals.format(photoDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
-               th:classappend="${photoDate != null and #temporals.createNow().toLocalDate().isBefore(photoDate.plusDays(1))} ? 'blink' : ''"
-            >
+               th:classappend="${photoDate != null and #temporals.createNow().toLocalDate().isBefore(photoDate.plusDays(1))} ? 'blink' : ''">
             </p>
         </div>
-    </div>
-</div>
-<script>
-    // Зміна src для iframe при натисканні на кнопку "Переглянути прайс без картинок"
-    document.querySelector('button:nth-child(2)').addEventListener('click', function () {
-        document.getElementById('priceIframe').src = '/excel/view/M'; // Оновлюємо src для перегляду Excel
-    });
 
-    // Зміна src для iframe при натисканні на кнопку "Переглянути прайс з картинками"
-    document.querySelector('button:nth-child(1)').addEventListener('click', function () {
-        document.getElementById('priceIframe').src = '/pdf/view/M'; // Оновлюємо src для перегляду PDF
-    });
-</script>
+    </div>
+
+</div>
 </body>
 </html>

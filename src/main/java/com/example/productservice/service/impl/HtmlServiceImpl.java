@@ -49,6 +49,8 @@ public class HtmlServiceImpl implements HtmlService {
         return ResponseEntity.ok("HTML прайс завантажено.");
     }
 
+
+
     @Override
     public ResponseEntity<String> viewHtmlFromDb(String id) {
         Optional<HtmlPrice> htmlFile = repository.findById(id);
