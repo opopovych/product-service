@@ -231,7 +231,7 @@
 
     <div class="buttons">
         <div class="button-container">
-            <button onclick="window.location.href='/html/view/L'">Фото-прайс онлайн</button>
+            <button onclick="window.location.href='/html/view/M'">Фото-прайс онлайн</button>
             <p class="update-date"
                th:text="${htmlDate != null ? 'Оновлено: ' + #temporals.format(htmlDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${htmlDate != null and #temporals.createNow().toLocalDate().isBefore(htmlDate.plusDays(1))} ? 'blink' : ''">
@@ -239,7 +239,7 @@
         </div>
 
         <div class="button-container">
-            <button onclick="window.location.href='/excel/view/L'">Прайс без фото асортименту</button>
+            <button onclick="window.location.href='/excel/view/M'">Прайс без фото асортименту</button>
             <p class="update-date"
                th:text="${excelDate != null ? 'Оновлено: ' + #temporals.format(excelDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${excelDate != null and #temporals.createNow().toLocalDate().isBefore(excelDate.plusDays(1))} ? 'blink' : ''">
@@ -247,7 +247,7 @@
         </div>
 
         <div class="button-container">
-            <button onclick="window.location.href='/photo/view/L'">Останні оновлення асортименту</button>
+            <button onclick="window.location.href='/photo/view/M'">Останні оновлення асортименту</button>
             <p class="update-date"
                th:text="${photoDate != null ? 'Оновлено: ' + #temporals.format(photoDate, 'dd MMMM yyyy') : 'Дата оновлення недоступна'}"
                th:classappend="${photoDate != null and #temporals.createNow().toLocalDate().isBefore(photoDate.plusDays(1))} ? 'blink' : ''">
