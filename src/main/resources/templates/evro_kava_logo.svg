@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="600" height="300" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+    <!-- Wings -->
+    <g fill="none" stroke="#A67C52" stroke-width="5" stroke-linecap="round">
+        <!-- Верхні лінії крил -->
+        <path d="M50,150 H200" />
+        <path d="M400,150 H550" />
+        <!-- Середні лінії крил -->
+        <path stroke-width="3" d="M70,165 H210" />
+        <path stroke-width="3" d="M390,165 H530" />
+        <!-- Нижні лінії крил -->
+        <path stroke-width="2" d="M90,180 H220" />
+        <path stroke-width="2" d="M380,180 H510" />
+    </g>
+
+    <!-- Щит -->
+    <polygon points="250,50 350,50 400,150 300,270 200,150"
+             fill="#D9B382" stroke="#A67C52" stroke-width="5"/>
+
+    <!-- Контур щита внутрішній -->
+    <polygon points="260,60 340,60 380,150 300,255 220,150"
+             fill="none" stroke="#A67C52" stroke-width="3"/>
+
+    <!-- Літери ЄК всередині -->
+    <text x="300" y="160"
+          font-family="Verdana, Geneva, sans-serif"
+          font-size="80"
+          font-weight="bold"
+          fill="#A67C52"
+          text-anchor="middle"
+          alignment-baseline="middle">ЄК</text>
+</svg>
