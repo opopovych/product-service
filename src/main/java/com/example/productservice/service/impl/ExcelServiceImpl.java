@@ -108,7 +108,7 @@ public class ExcelServiceImpl implements ExcelService {
                     .append("border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }")
                     .append("table { width: 100%;border: 2px solid #bca57f; border-collapse: collapse; margin-top: 10px; }")
                     .append("th {color: white;border: 1px solid #bca57f; padding: 12px; text-align: left; font-size: 16px; }")
-                    .append("td { padding: 10px; border: 1px solid #bca57f;color: #d9c8b7; font-size: 14px; }")
+                    .append("td { padding: 10px; border: 1px solid #bca57f;color: #4b3621; font-size: 15px; }")
                     .append("tr:nth-child(even)")
                     .append("tr:nth-child(odd)")
                     .append("tr:first-child th { position: sticky; top: 60px; color: white; z-index: 1; }")
@@ -129,11 +129,6 @@ public class ExcelServiceImpl implements ExcelService {
             html.append("<div class='download-bar'>")
                     .append("<a href='/excel/download/" + fileName + "' download>⬇ Завантажити Excel</a>")
                     .append("</div>");
-            html.append("<video autoplay muted loop playsinline id=\"bgVideo\">\n")
-                    .append("    <source src=\"/video/coffee-bg.mp4\" type=\"video/mp4\">\n")
-                    .append("</video>\n")
-                    .append("<script>document.getElementById('bgVideo').playbackRate = 0.6;</script>");
-
 
             html.append("<div class='table-container'><table>");
 

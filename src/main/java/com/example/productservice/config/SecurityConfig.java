@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/html/view/M","/excel/view/M","/photo/view/M","/pdf/view/S",
                                 "/new-client","/new-client/form","/new-client/range","/new-client/request",
                                 "/html/view/S","/excel/view/S","/photo/view/S","/excel/download/L",
-                                "/excel/download/M","/excel/download/S","/zp.png",
+                                "/excel/download/M","/excel/download/S","/zp.png","/video/coffee-bg.mp4",
                                 "/css/**", "/js/**", "/images/**", "/evro_kava_logo.svg") // Додано нові шляхи
                         .permitAll() // Дозволяємо доступ до головної сторінки та нових шляхів без аутентифікації
                         .requestMatchers("/upload/**").hasRole("ADMIN") // Доступ до /upload тільки для адміністраторів
