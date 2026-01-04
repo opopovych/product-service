@@ -3,135 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переглянути запити клієнтів</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Запити клієнтів - Адмін</title>
     <style>
+        :root {
+            --bg-color: #0f0e0e;
+            --accent: #d4a373;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #3e2723;
-            color: #fff;
-            text-align: center;
             margin: 0;
             padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 10px;
+        }
+
+        /* Фоновий градієнт */
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 50% 0%, rgba(212, 163, 115, 0.05) 0%, transparent 50%);
+            z-index: -1;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #5d4037;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 1100px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            font-size: 2em;
-            color: white;
-            margin-bottom: 20px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        h1 b {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        /* Таблиця в скляному стилі */
+        .table-wrapper {
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background: #8d6e63;
-            font-size: 0.95em;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #3e2723;
             text-align: left;
         }
 
         th {
-            background-color: #6d4c41;
-            color: white;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 0.75rem;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        tr:hover {
-            background-color: #a1887f;
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.95rem;
+            transition: var(--transition-smooth);
+        }
+
+        tr.client-row {
             cursor: pointer;
+            transition: var(--transition-smooth);
         }
 
-        /* прихована додаткова інформація */
+        tr.client-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        /* Стиль деталей */
         .details {
             display: none;
-            background-color: #7b5e57;
+            background: rgba(0, 0, 0, 0.2);
+            animation: slideDown 0.4s ease-out;
         }
 
-        .details td {
-            padding: 8px 12px;
-            border-top: none;
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .comment {
-            max-width: 250px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+        .details-content {
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #ccc;
+        }
+
+        .details-content b {
+            color: var(--accent);
+            font-weight: 500;
+            margin-right: 5px;
+        }
+
+        /* Кнопка видалення */
+        .delete-btn {
+            color: #ff6b6b;
+            text-decoration: none;
+            font-size: 0.8rem;
+            padding: 8px 16px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+            border-radius: 12px;
+            transition: var(--transition-smooth);
+            display: inline-block;
+        }
+
+        .delete-btn:hover {
+            background: rgba(255, 107, 107, 0.1);
+            border-color: #ff6b6b;
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            th:nth-child(2), td:nth-child(2) { display: none; } /* Ховаємо місто на мобільних */
+            .details-content { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
+
+<div class="gradient-bg"></div>
+
 <div class="container">
-    <h1>Список запитів нових клієнтів</h1>
+    <h1>Запити <b>Нових Клієнтів</b></h1>
 
-    <table>
-        <thead>
-        <tr>
-            <th>ПІБ</th>
-            <th>Місто</th>
-            <th>Телефон</th>
-            <th>Видалення</th>
-        </tr>
-        </thead>
-        <tbody>
-        <th:block th:each="client : ${clients}">
-            <!-- коротка інформація -->
-            <tr onclick="toggleDetails(this)">
-                <td th:text="${client.lastName + ' ' + client.firstName}">Ім’я</td>
-                <td th:text="${client.city}">Місто</td>
-                <td th:text="${client.phone}">Телефон</td>
-                <td>
-                    <a th:href="@{/new-client/delete/{id}(id=${client.id})}"
-                       onclick="return confirm('Точно видалити клієнта?')"
-                       style="color: #ddd; text-decoration: none;"
-                       onmouseover="this.style.color='#fff';"
-                       onmouseout="this.style.color='#ddd';">
-                        ❌ Видалити
-                    </a>
-
-                </td>
-
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>ПІБ</th>
+                <th>Місто</th>
+                <th>Телефон</th>
+                <th>Дія</th>
             </tr>
+            </thead>
+            <tbody>
+            <th:block th:each="client : ${clients}">
+                <tr class="client-row" onclick="toggleDetails(this)">
+                    <td th:text="${client.lastName + ' ' + client.firstName}" style="font-weight: 500;">Прізвище Ім'я</td>
+                    <td th:text="${client.city}">Місто</td>
+                    <td th:text="${client.phone}">+380...</td>
+                    <td onclick="event.stopPropagation()">
+                        <a th:href="@{/new-client/delete/{id}(id=${client.id})}"
+                           class="delete-btn"
+                           onclick="return confirm('Видалити цей запит?')">
+                            Видалити
+                        </a>
+                    </td>
+                </tr>
 
-            <!-- детальна інформація -->
-            <tr class="details">
-                <td colspan="3">
-                    <b>Email:</b> <span th:text="${client.email}"></span><br>
-                    <b>Компанія:</b> <span th:text="${client.companyName}"></span><br>
-                    <b>Оборот:</b> <span th:text="${client.monthlyAmount} + ' грн'"></span><br>
-                    <b>Звідки дізнались:</b> <span th:text="${client.whereFindUs}"></span><br>
-                    <b>ІПН:</b> <span th:text="${client.taxId}"></span><br>
-                    <b>Коментар:</b> <span th:text="${client.comment}"></span><br>
-                    <b>Дата:</b> <span th:text="${#temporals.format(client.createdAt, 'yyyy-MM-dd HH:mm')}"></span>
-                </td>
-            </tr>
-        </th:block>
-        </tbody>
-
-    </table>
+                <tr class="details">
+                    <td colspan="4">
+                        <div class="details-content">
+                            <div><b>Email:</b> <span th:text="${client.email}">-</span></div>
+                            <div><b>Компанія:</b> <span th:text="${client.companyName}">-</span></div>
+                            <div><b>Оборот:</b> <span th:text="${client.monthlyAmount} + ' грн'">0</span></div>
+                            <div><b>Джерело:</b> <span th:text="${client.whereFindUs}">-</span></div>
+                            <div><b>ІПН/ЄДРПОУ:</b> <span th:text="${client.taxId}">-</span></div>
+                            <div><b>Дата:</b> <span th:text="${#temporals.format(client.createdAt, 'dd.MM.yyyy HH:mm')}">-</span></div>
+                            <div style="grid-column: 1 / -1; border-top: 1px solid rgba(255,255,255,0.05); pt: 10px;">
+                                <b>Коментар:</b> <span th:text="${client.comment}">Немає коментарів</span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <script>
     function toggleDetails(row) {
         const nextRow = row.nextElementSibling;
         if (nextRow && nextRow.classList.contains("details")) {
-            nextRow.style.display = nextRow.style.display === "table-row" ? "none" : "table-row";
+            const isVisible = nextRow.style.display === "table-row";
+            
+            // Закриваємо всі інші відкриті рядки (опціонально для чистоти)
+            document.querySelectorAll('.details').forEach(el => el.style.display = 'none');
+            
+            // Відкриваємо поточний
+            nextRow.style.display = isVisible ? "none" : "table-row";
         }
     }
 </script>
+
 </body>
 </html>

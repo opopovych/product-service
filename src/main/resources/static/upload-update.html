@@ -1,83 +1,194 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Завантажити оновлення</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Завантажити оновлення - ЄвроКава</title>
     <style>
+        :root {
+            --bg-color: #0f0e0e;
+            --accent: #d4a373;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #3e2723;
-            color: #fff;
-            text-align: center;
             margin: 0;
             padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        /* Анімований фон */
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 10% 90%, rgba(212, 163, 115, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+
         .container {
-            width: 90%;
-            max-width: 800px;
-            margin: 40px auto;
+            width: 100%;
+            max-width: 600px;
             padding: 20px;
-            background: #5d4037;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-out;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .upload-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 50px 40px;
+            text-align: center;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+        }
+
         h1 {
-            font-size: 2rem;
-            margin-bottom: 20px;
+            font-weight: 300;
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+            font-size: 1.8rem;
         }
-        form {
+
+        h1 b {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+        }
+
+        /* Групи для фото */
+        .upload-group {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            gap: 20px;
+            margin-bottom: 40px;
         }
+
+        .file-input-wrapper {
+            position: relative;
+            text-align: left;
+        }
+
         label {
-            font-size: 1.1rem;
-            margin: 10px 0 5px;
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--accent);
+            margin-bottom: 8px;
+            margin-left: 15px;
         }
-        input[type="text"], textarea, input[type="file"] {
+
+        input[type="file"] {
             width: 100%;
-            max-width: 500px;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 12px 15px;
+            color: #888;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.85rem;
+            transition: var(--transition-smooth);
+            box-sizing: border-box;
         }
-        textarea {
-            resize: vertical;
+
+        input[type="file"]:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--accent);
         }
-        button {
-            background-color: #d7a86e;
-            color: #3e2723;
-            font-size: 1.1rem;
-            padding: 15px 30px;
+
+        input[type="file"]::file-selector-button {
+            background: var(--accent);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
+            padding: 8px 16px;
+            color: var(--bg-color);
+            font-weight: 700;
+            font-size: 0.75rem;
+            margin-right: 15px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s;
+            transition: 0.3s;
         }
-        button:hover {
-            background-color: #c69c6d;
+
+        .submit-btn {
+            width: 100%;
+            background: var(--accent);
+            color: var(--bg-color);
+            border: none;
+            padding: 20px;
+            border-radius: 25px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            box-shadow: 0 10px 25px rgba(212, 163, 115, 0.2);
+        }
+
+        .submit-btn:hover {
             transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(212, 163, 115, 0.4);
+            filter: brightness(1.1);
+        }
+
+        @media (max-width: 480px) {
+            .upload-card { padding: 30px 20px; }
+            h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 
+<div class="gradient-bg"></div>
+
 <div class="container">
-    <h1>Завантажити оновлення</h1>
-    <form action="/photo/upload" method="POST" enctype="multipart/form-data">
+    <div class="upload-card">
+        <h1>Фото <b>Оновлення</b></h1>
+        <p class="subtitle">Завантажте нові фотографії для новинок асортименту</p>
 
-        <label for="photoL">Завантажити зображення L:</label>
-        <input type="file" id="photoL" name="photoL" accept="image/*" >
-        <label for="photoM">Завантажити зображення M:</label>
-        <input type="file" id="photoM" name="photoM" accept="image/*" >
-        <label for="photoS">Завантажити зображення S:</label>
-        <input type="file" id="photoS" name="photoS" accept="image/*" >
+        <form action="/photo/upload" method="POST" enctype="multipart/form-data">
+            <div class="upload-group">
+                
+                <div class="file-input-wrapper">
+                    <label for="photoL">Зображення L (Large)</label>
+                    <input type="file" id="photoL" name="photoL" accept="image/*">
+                </div>
 
-        <button type="submit">Завантажити оновлення</button>
-    </form>
+                <div class="file-input-wrapper">
+                    <label for="photoM">Зображення M (Medium)</label>
+                    <input type="file" id="photoM" name="photoM" accept="image/*">
+                </div>
+
+                <div class="file-input-wrapper">
+                    <label for="photoS">Зображення S (Small)</label>
+                    <input type="file" id="photoS" name="photoS" accept="image/*">
+                </div>
+
+            </div>
+
+            <button type="submit" class="submit-btn">Завантажити оновлення</button>
+        </form>
+    </div>
 </div>
 
 </body>
