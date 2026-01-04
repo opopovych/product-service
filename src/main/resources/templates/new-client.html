@@ -3,199 +3,232 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переглянути прайс - ЄвроКава</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Ласкаво просимо до ЄвроКави</title>
     <style>
+        :root {
+            --bg-color: #0f0e0e;
+            --accent: #d4a373;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 40px 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: #fff;
+            min-height: 100vh;
             display: flex;
+            align-items: center;
             justify-content: center;
-            align-items: center;
-            background: linear-gradient(to right, #6F4E37, #3E2723);
-            text-align: center;
-            color: white;
+            overflow-x: hidden;
         }
 
-        .container {
-            width: 95%;
+        /* Фоновий градієнт */
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 15% 15%, rgba(212, 163, 115, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(212, 163, 115, 0.05) 0%, transparent 40%);
+            z-index: -1;
+        }
+
+        .main-container {
+            width: 90%;
             max-width: 1000px;
-            padding: 30px;
-            background-color: white;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            color: black;
+            text-align: center;
+            padding: 40px 0;
+            animation: fadeIn 1.2s ease-out;
         }
 
-        .header {
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header-section {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 100px;
-            padding: 0 10px;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+            gap: 30px;
         }
 
-        .logo {
-            width: 300px;
+        .brand-box img {
+            max-height: 80px;
+            filter: drop-shadow(0 0 20px rgba(0,0,0,0.5));
         }
-        .logoz {
-            width: 150px;
-        }
-        h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
-            color: #6F4E37;
-        }
-.partner-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 160px;
-}
-.ec-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 370px;
-}
 
-.partner-text {
-    font-size: 0.8em;
-    color: #6F4E37;
-    margin-top: 8px;
-    text-align: center;
-    line-height: 1.2;
-}
-.ec-text {
-    font-size: 1.8em;
-    color: #6F4E37;
-    margin-top: 8px;
-    text-align: center;
-    line-height: 1.2;
-}
-.partner-phone {
-    display: inline-block;
-    margin-top: 8px;
-    font-weight: bold;
-    color: #6F4E37;
-    font-size: 0.95em;
-}
+        .brand-title {
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-top: 10px;
+            font-weight: 300;
+        }
 
-        .buttons {
+        /* Блок партнера */
+        .partner-card {
+            background: rgba(212, 163, 115, 0.05);
+            border: 1px solid rgba(212, 163, 115, 0.1);
+            padding: 20px;
+            border-radius: 25px;
+            max-width: 320px;
+            text-align: left;
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition-smooth);
         }
 
-        button {
-            flex: 1;
-            padding: 15px;
-            font-size: 1.2em;
-            background-color: #6F4E37;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s;
+        .partner-card:hover {
+            background: rgba(212, 163, 115, 0.1);
+            border-color: var(--accent);
         }
 
-        button:hover {
-            background-color: #4B3621;
-            transform: scale(1.05);
+        .partner-card img {
+            height: 50px;
         }
-        .button-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 
-.update-date {
-    font-size: 0.9em;
-    color: #6F4E37;
-    margin-top: 5px;
-}
-@keyframes blink-animation {
-    50% { opacity: 0; }
-}
+        .partner-info h4 {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-transform: uppercase;
+        }
 
-.blink {
-    animation: blink-animation 1s infinite !important;
-    font-weight: bold;
-    color: #6F4E37 !important; /* Помітний колір */
-}
+        .partner-info p {
+            margin: 5px 0;
+            font-size: 0.75rem;
+            line-height: 1.3;
+            color: #aaa;
+        }
 
+        .partner-phone {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        /* Контент */
+        h1 {
+            font-size: clamp(2rem, 6vw, 3.5rem);
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        h1 b {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .hero-text {
+            color: #888;
+            max-width: 600px;
+            margin: 0 auto 50px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        /* Кнопки */
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .action-btn {
+            background: var(--card-glass);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 40px 30px;
+            border-radius: 35px;
+            color: #fff;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--accent);
+            transform: translateY(-10px);
+        }
+
+        .action-btn i {
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .action-btn h3 {
+            margin: 0;
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .action-btn span {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.4;
+        }
 
         @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .buttons {
-                flex-direction: column;
-            }
-            button {
-                width: 100%;
-            }
+            .header-section { justify-content: center; text-align: center; }
+            .action-grid { grid-template-columns: 1fr; }
+            .partner-card { max-width: 100%; }
         }
-
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <div class="ec-info">
-            <img th:src="@{/evro_kava_logo.svg}" alt="Логотип кави" class="logo">
-            <p class="ec-text">
-                ЄвроКава
-            </p>
+<div class="gradient-bg"></div>
+
+<div class="main-container">
+    <div class="header-section">
+        <div class="brand-box">
+            <img src="evro_kava_logo.svg" alt="ЄвроКава">
+            <div class="brand-title">ЄвроКава</div>
         </div>
 
-        <div class="partner-info">
-            <a href="https://zahotilypoletily.com.ua/" target="_blank">
-                <img th:src="@{/zp.png}" alt="ZP логотип" class="logoz">
-            </a>
-            <p class="partner-text">
-                Наш партнер<br>
-                <strong>Бонус для клієнтів ЄвроКави<br>при замовленні туру</strong><br>
-                <a href="tel:+380965493992" class="partner-phone">+38 (096) 549 39 92</a>
-            </p>
-        </div>
+        <a href="https://zahotilypoletily.com.ua/" target="_blank" style="text-decoration: none;">
+            <div class="partner-card">
+                <img src="zp.png" alt="Захотіли Полетіли">
+                <div class="partner-info">
+                    <h4>Бонус від партнера</h4>
+                    <p>Спеціальні умови на тур для клієнтів ЄвроКави</p>
+                    <span class="partner-phone">+38 (096) 549 39 92</span>
+                </div>
+            </div>
+        </a>
     </div>
 
-    <h1>Ласкаво просимо</h1>
-    <p>Перегляньте асортимент товарів або надішліть запит на доступ до актуальних цін.</p>
+    <h1>Ласкаво <b>просимо</b></h1>
+    <p class="hero-text">Відкрийте для себе найкращий асортимент товарів. Для отримання доступу до гуртових цін, будь ласка, надішліть запит.</p>
 
-    <div class="buttons">
-        <!--<div class="button-container">
-            <button onclick="window.location.href='/pdf/view/L'">Прайс з фото асортименту</button>
-            <p class="update-date"
-               th:text="${pdfDate != null ? 'Оновлено: ' + #temporals.format(pdfDate, 'dd MM yyyy') : 'Дата оновлення недоступна'}"
-               th:classappend="${pdfDate != null and #temporals.createNow().toLocalDate().isBefore(pdfDate.plusDays(1))} ? 'blink' : ''">
+    <div class="action-grid">
+        <a href="/new-client/range" class="action-btn">
+            <h3>📦 Асортимент</h3>
+            <span>Переглянути перелік доступних товарів без цін</span>
+        </a>
 
-            </p>
-        </div>-->
-        <div class="button-container">
-                <button onclick="window.location.href='/new-client/range'">Переглянути асортимент товару</button>
-
-        </div>
-        <div class="button-container">
-            <button onclick="window.location.href='/new-client/form'">Створити запит на доступ до прайсу</button>
-
-        </div>
+        <a href="/new-client/form" class="action-btn" style="border-color: rgba(212, 163, 115, 0.3);">
+            <h3>🔑 Отримати доступ</h3>
+            <span>Заповнити анкету для реєстрації та перегляду прайсу</span>
+        </a>
+    </div>
 </div>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

@@ -3,155 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Переглянути завантажені прайси</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>Архів прайсів - Адмін</title>
     <style>
+        :root {
+            --bg-color: #0f0e0e;
+            --accent: #d4a373;
+            --card-glass: rgba(255, 255, 255, 0.03);
+            --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            background-color: #3e2723;
-            color: #fff;
-            text-align: center;
             margin: 0;
             padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 40px 10px;
+        }
+
+        .gradient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(212, 163, 115, 0.05) 0%, transparent 50%);
+            z-index: -1;
         }
 
         .container {
             width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #5d4037;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            max-width: 1100px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
-            font-size: 2em;
-            margin-bottom: 20px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        h1 b {
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .table-wrapper {
+            background: var(--card-glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 30px;
+            overflow-x: auto; /* Скрол для мобільних */
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
-            background: #8d6e63;
-        }
-
-        th, td {
-            padding: 10px;
-            border: 1px solid #3e2723;
+            text-align: left;
+            min-width: 700px; /* Гарантуємо читабельність */
         }
 
         th {
-            background-color: #6d4c41;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.02);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
-        a {
-            color: #ffeb3b;
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        tr:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Бейджі типів */
+        .type-badge {
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--accent);
+            border: 1px solid rgba(212, 163, 115, 0.2);
+        }
+
+        /* Посилання-кнопки */
+        .view-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
             text-decoration: none;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 16px;
+            border-radius: 12px;
+            transition: var(--transition-smooth);
+            border: 1px solid transparent;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .view-link:hover {
+            background: var(--accent);
+            color: var(--bg-color);
+            transform: translateY(-2px);
         }
 
-        /* Медіа-запит для мобільних пристроїв */
+        /* Кастомізація скролбару */
+        .table-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+        .table-wrapper::-webkit-scrollbar-thumb {
+            background: rgba(212, 163, 115, 0.2);
+            border-radius: 10px;
+        }
+
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5em;
-            }
-
-            .container {
-                width: 100%;
-                padding: 10px;
-            }
-
-            table {
-                font-size: 0.9em; /* Зменшення шрифтів таблиці на мобільних пристроях */
-            }
-
-            th, td {
-                padding: 8px; /* Зменшення відступів для більш компактної таблиці */
-            }
-
-            td, th {
-                word-wrap: break-word;
-                max-width: 150px; /* Обмеження ширини стовпців */
-            }
-
-            a {
-                font-size: 0.9em;
-            }
-
-            .container h1 {
-                font-size: 1.2em;
-            }
-        }
-
-        /* Додаткові стилі для менших екранів */
-        @media (max-width: 480px) {
-            table {
-                font-size: 0.8em;
-            }
-
-            td, th {
-                padding: 6px; /* Ще більше зменшуємо відступи на дуже малих екранах */
-            }
+            h1 { font-size: 1.5rem; }
+            td, th { padding: 15px; }
         }
     </style>
 </head>
 <body>
 
+<div class="gradient-bg"></div>
+
 <div class="container">
-    <h1>Список завантажених прайсів</h1>
+    <h1>Архів <b>Прайсів</b></h1>
 
-    <table>
-        <thead>
-        <tr>
-            <th>Ідентифікатор</th>
-            <th>Назва</th>
-            <th>Тип</th>
-            <th>Дата завантаження</th>
-            <th>Перегляд</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Вивід PDF файлів -->
-        <!--<tr th:each="pdf : ${pdfFiles}">
-            <td th:text="${pdf.id}"></td>
-            <td th:text="${pdf.filename}"></td>
-            <td>PDF</td>
-            <td th:text="${pdf.uploadDate}"></td>
-            <td><a th:href="@{'/pdf/view/' + ${pdf.id}}" target="_blank">👁️ Переглянути</a></td>
-        </tr>-->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Назва файлу</th>
+                <th>Тип</th>
+                <th>Дата завантаження</th>
+                <th>Дія</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="html : ${htmlFiles}">
+                <td th:text="${html.id}">1</td>
+                <td th:text="${html.name}">Прайс L</td>
+                <td><span class="type-badge">Html</span></td>
+                <td th:text="${html.uploadDate}">01.01.2024</td>
+                <td><a class="view-link" th:href="@{'/html/view/' + ${html.id}}" target="_blank">👁️ Перегляд</a></td>
+            </tr>
 
-        <!-- Вивід HTML файлів -->
-        <tr th:each="html : ${htmlFiles}">
-            <td th:text="${html.id}"></td>
-            <td th:text="${html.name}"></td>
-            <td>Html</td>
-            <td th:text="${html.uploadDate}"></td>
-            <td><a th:href="@{'/html/view/' + ${html.id}}" target="_blank">👁️ Переглянути</a></td>
-        </tr>
+            <tr th:each="excel : ${excelFiles}">
+                <td th:text="${excel.id}">2</td>
+                <td th:text="${excel.filename}">Price_List.xlsx</td>
+                <td><span class="type-badge" style="color: #81c784; border-color: rgba(129, 199, 132, 0.3);">Excel</span></td>
+                <td th:text="${excel.uploadDate}">01.01.2024</td>
+                <td><a class="view-link" th:href="@{'/excel/view/' + ${excel.id}}" target="_blank">👁️ Перегляд</a></td>
+            </tr>
 
-        <!-- Вивід Excel файлів -->
-        <tr th:each="excel : ${excelFiles}">
-            <td th:text="${excel.id}"></td>
-            <td th:text="${excel.filename}"></td>
-            <td>Excel</td>
-            <td th:text="${excel.uploadDate}"></td>
-            <td><a th:href="@{'/excel/view/' + ${excel.id}}" target="_blank">👁️ Переглянути</a></td>
-        </tr>
-
-        <!-- Вивід Фото -->
-        <tr th:each="photo : ${photos}">
-            <td th:text="${photo.id}"></td>
-            <td th:text="${photo.filename}"></td>
-            <td>Jpeg</td>
-            <td th:text="${photo.uploadDate}"></td>
-            <td><a th:href="@{'/photo/view/' + ${photo.id}}" target="_blank">👁️ Переглянути</a></td>
-        </tr>
-        </tbody>
-    </table>
+            <tr th:each="photo : ${photos}">
+                <td th:text="${photo.id}">3</td>
+                <td th:text="${photo.filename}">New_Arrival.jpg</td>
+                <td><span class="type-badge" style="color: #64b5f6; border-color: rgba(100, 181, 246, 0.3);">Jpeg</span></td>
+                <td th:text="${photo.uploadDate}">01.01.2024</td>
+                <td><a class="view-link" th:href="@{'/photo/view/' + ${photo.id}}" target="_blank">👁️ Перегляд</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 </body>
