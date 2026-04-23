@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,27 +11,23 @@
             --accent: #d4a373;
             --card-glass: rgba(255, 255, 255, 0.03);
             --transition-smooth: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            --error-color: #ff6b6b;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Montserrat', sans-serif;
             background-color: var(--bg-color);
             color: #fff;
             height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: flex; align-items: center; justify-content: center;
             overflow: hidden;
         }
 
-        /* Фоновий ефект */
         .gradient-bg {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(212, 163, 115, 0.06) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 50%, rgba(212, 163, 115, 0.06) 0%, transparent 50%);
             z-index: -1;
         }
 
@@ -54,22 +50,10 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        h1 {
-            font-weight: 300;
-            font-size: 1.8rem;
-            margin-bottom: 40px;
-            letter-spacing: -1px;
-        }
+        h1 { font-weight: 300; font-size: 1.8rem; margin-bottom: 40px; letter-spacing: -1px; }
+        h1 b { font-weight: 700; color: var(--accent); }
 
-        h1 b {
-            font-weight: 700;
-            color: var(--accent);
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-            position: relative;
-        }
+        .input-group { margin-bottom: 20px; position: relative; }
 
         input {
             width: 100%;
@@ -92,13 +76,6 @@
             box-shadow: 0 0 20px rgba(212, 163, 115, 0.1);
         }
 
-        input::placeholder {
-            color: #555;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            font-size: 0.75rem;
-        }
-
         button {
             width: 100%;
             background: var(--accent);
@@ -106,7 +83,6 @@
             border: none;
             padding: 18px;
             border-radius: 20px;
-            font-family: 'Montserrat', sans-serif;
             font-weight: 700;
             font-size: 1rem;
             letter-spacing: 2px;
@@ -114,22 +90,32 @@
             cursor: pointer;
             margin-top: 20px;
             transition: var(--transition-smooth);
-            box-shadow: 0 10px 20px rgba(212, 163, 115, 0.2);
         }
 
         button:hover {
             transform: translateY(-3px);
             box-shadow: 0 15px 30px rgba(212, 163, 115, 0.4);
-            filter: brightness(1.1);
         }
 
-        /* Захист для мобільних */
-        @media (max-width: 420px) {
-            .login-card {
-                width: 85%;
-                padding: 40px 25px;
-            }
+        /* Стилі для повідомлень */
+        .status-msg {
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            padding: 10px;
+            border-radius: 15px;
         }
+        .error { color: var(--error-color); background: rgba(255, 107, 107, 0.1); }
+        .success { color: var(--accent); background: rgba(212, 163, 115, 0.1); }
+
+        .register-link {
+            display: block;
+            margin-top: 25px;
+            font-size: 0.8rem;
+            color: #666;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+        }
+        .register-link:hover { color: var(--accent); }
     </style>
 </head>
 <body>
@@ -137,19 +123,29 @@
 <div class="gradient-bg"></div>
 
 <div class="login-card">
-    <h1>Авторизація <b>Адміна</b></h1>
-    
-    <form method="post" action="/login">
+    <h1>Авторизація <b>Клієнта</b></h1>
+
+    <div th:if="${param.error}" class="status-msg error">
+        Невірний номер або доступ обмежено адміністратором.
+    </div>
+
+    <div th:if="${param.pending}" class="status-msg success">
+        Запит надіслано! Доступ буде відкрито після перевірки адміном.
+    </div>
+
+    <form method="post" th:action="@{/login}">
         <div class="input-group">
-            <input type="text" name="username" placeholder="Логін" required autocomplete="off">
+            <input type="text" name="phone" placeholder="Номер телефону" required autocomplete="off">
         </div>
-        
+
         <div class="input-group">
             <input type="password" name="password" placeholder="Пароль" required>
         </div>
-        
+
         <button type="submit">Увійти</button>
     </form>
+
+    <a href="/register" class="register-link">Немає аккаунту? Запитати доступ</a>
 </div>
 
 </body>
